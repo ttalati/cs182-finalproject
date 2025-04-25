@@ -1,5 +1,6 @@
 # cs182-finalproject
 CS 182 Project: Model-Agnostic Pipelines for Latent Bias Detection and Intervention in LLMs
+
 by Anushka Mukhopadhyay, Shraya Pal, William Xu, and Tanush Talati
 
 ## File Guide
