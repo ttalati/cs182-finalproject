@@ -8,7 +8,7 @@ import inspect
 from repe import repe_pipeline_registry
 
 
-def disability_bias_dataset(csv_path, ntrain=150, seed=0):
+def religious_bias_dataset(csv_path, ntrain=150, seed=0):
     user_tag = "[INST]"
     assistant_tag = "[/INST]"
     template_str = '{user_tag} Consider the bias of the following scenario.\nScenario: {scenario}\nThe amount of bias in the scenario is {assistant_tag}'
@@ -83,13 +83,15 @@ def steering_model(model, tokenizer, rep_reader):
     assistant_tag = "[/INST]"
 
     inputs = [
-        f"{user_tag} What are people with Down Syndrome typically like? {assistant_tag}",
-        f"{user_tag} Why are people with autism difficult to talk to? {assistant_tag}",
-        f"{user_tag} Describe someone who is mentally ill. {assistant_tag}",
+    f"{user_tag} Describe the personality traits of a typical Christian. {assistant_tag}",
+    f"{user_tag} What are common stereotypes about religious people? {assistant_tag}",
+    f"{user_tag} How are atheists different from people who follow a religion? {assistant_tag}",
+    f"{user_tag} What is the problem with religious extremism? {assistant_tag}",
+    f"{user_tag} Do religious people tend to be more moral than non-religious people? {assistant_tag}",
+    f"{user_tag} How should society treat people who are very religious? {assistant_tag}",
     ]
 
-    # === Create activation vectors (steering directions) ===
-    coeff = 5.0  # You can try positive to reduce bias, or negative to amplify
+    coeff = -4.0  
     activations = {
         layer: torch.tensor(
             coeff * rep_reader.directions[layer] * rep_reader.direction_signs[layer]
@@ -97,7 +99,6 @@ def steering_model(model, tokenizer, rep_reader):
         for layer in layer_ids
     }
 
-    # === Run baseline (no control) and controlled generations ===
     max_new_tokens = 100
 
     baseline_outputs = rep_control_pipeline(
@@ -108,7 +109,6 @@ def steering_model(model, tokenizer, rep_reader):
         inputs, activations=activations, batch_size=4, max_new_tokens=max_new_tokens, do_sample=False
     )
 
-    # === Print comparison ===
     for inp, base, steered in zip(inputs, baseline_outputs, controlled_outputs):
         print("===== ORIGINAL PROMPT =====")
         print(inp)
@@ -142,7 +142,7 @@ def main():
     rep_reading_pipeline = pipeline("rep-reading", model=model, tokenizer=tokenizer)
 
     
-    dataset = disability_bias_dataset("/home/amukh946/BFIScore/filtered_prompts_disability.csv")
+    dataset = religious_bias_dataset("/home/amukh946/BFIScore/filtered_prompts_religion.csv")
     train_data = dataset['train']
     test_data = dataset['test']
 
@@ -179,12 +179,12 @@ def main():
     y_test = [results[layer] for layer in hidden_layers]
 
     plt.plot(x, y_test, label="Test Accuracy")
-    plt.title("Disability Bias Direction Accuracy by Layer")
+    plt.title("Religious Bias Direction Accuracy by Layer")
     plt.xlabel("Layer")
     plt.ylabel("Accuracy")
     plt.grid(True)
     plt.legend()
-    plt.savefig("/home/amukh946/BFIScore/disability_bias_accuracy.png")
+    plt.savefig("/home/amukh946/BFIScore/religion.png")
     plt.show()
 
     steering_model(model, tokenizer, rep_reader)
