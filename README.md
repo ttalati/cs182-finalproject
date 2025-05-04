@@ -29,11 +29,11 @@ This script implements **Part B of the pipeline**: evaluating and modifying the 
    Using the computed bias direction, the script modifies hidden activations of the model at runtime to either **amplify** or **suppress** biased generations. Comparisons of baseline vs. steered generations are printed for qualitative analysis.
 
 The full pipeline includes:
-- Preparing training/test examples from a labeled disability bias dataset (`filtered_prompts_disability.csv`),
+- Preparing training/test examples from a labeled disability bias dataset (`filtered_prompts_religion.csv`),
 - Extracting bias directions via PCA over hidden state differences using the `rep-reading` pipeline,
 - Probing and plotting accuracy of bias classification layer-by-layer,
 - Running the `rep-control` pipeline with steering activations applied at middle transformer layers (-30 to -11),
-- Saving and visualizing the test accuracy plot (`disability_bias_accuracy.png`).
+- Saving and visualizing the test accuracy plot (`religion_bias_accuracy.png`).
 
 #### Requirements
 
