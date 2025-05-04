@@ -18,7 +18,7 @@ form `filtered_prompts_[bias_type].csv`
  that we present as the best-classifying model in the paper. Requires code in  `embedding_vis.ipynb` to be run first since that
  does the job of prompting GPT2 and storing the responses for downstream analysis.
 
- ### `steering.py`: Bias Direction Extraction and Activation Steering for Disability Bias
+ ### `steering.py`: Bias Direction Extraction and Activation Steering for Religious Bias
 
 This script implements **Part B of the pipeline**: evaluating and modifying the internal representations of LLMs to steer bias. It performs two main tasks:
 
